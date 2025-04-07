@@ -14,6 +14,7 @@ const allUsers = async (req, res) => {
     })
 }
 
+
 const create = async (req, res) => {
     try {
         const result = await db.collection("users").insertOne(req.body);
@@ -29,6 +30,15 @@ const create = async (req, res) => {
     }
 }
 
+
+const skillUp = async (req, res) => {
+    const id = ObjectId.createFromHexString(req.params.id);
+    const result = await db.collection('users').updateOne({ _id: id }, { $addToSet: { skills: req.body.skills } })
+    result.acknowledged
+        ? res.json(result)
+        : res.json({ message: 'fail' })
+}
+
 const filterByAge = async (req, res) => {
     const age = Number(req.params.age);
     const result = await db.collection('users').aggregate([
@@ -40,14 +50,32 @@ const filterByAge = async (req, res) => {
     })
 }
 
-const skillUp = async (req, res) => {
-    const id = ObjectId.createFromHexString(req.params.id);
-    const result = await db.collection('users').updateOne({ _id: id }, { $addToSet: { skills: req.body.skills } })
-    result.acknowledged
-        ? res.json(result)
-        : res.json({ message: 'fail' })
+// groupBy 
+const groupByType = async (req, res) => {
+    const result = await db.collection('users').aggregate([
+        { $group: { _id: "$type", count: { $sum: 1 } } }
+    ]).toArray();
+    res.json(result)
+}
+
+// test 
+const groupBy = async (req, res) => {
+    const result = await db.collection('users').aggregate([
+        { $match: { age: { $eq: 21 } } },
+        {
+            $group: {
+                _id: "$type",
+                totalAge: { $sum: "$age" },
+                count: { $sum: 1 },
+                avageAge: { $avg: "$age" },
+                minAge: { $min: "$age" },
+                maxAge: { $max: "$age" },
+            }
+        },
+    ]).toArray();
+    res.json(result);
 }
 
 module.exports = {
-    index, allUsers, create, filterByAge, skillUp
-}
+    index, allUsers, create, filterByAge, skillUp, groupByType, groupBy
+} 

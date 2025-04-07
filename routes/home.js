@@ -16,4 +16,10 @@ router.get('/filterByAge/:age', HomeController.filterByAge)
 // skillup
 router.patch('/skillup/:id', HomeController.skillUp)
 
+// groupby type
+router.get('/type', HomeController.groupByType)
+
+// groupBy age
+router.get('/age', HomeController.groupBy)
+
 module.exports = router 
