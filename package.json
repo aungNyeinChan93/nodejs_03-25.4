@@ -1,0 +1,20 @@
+{
+  "name": "express_tuto_3.25.4",
+  "version": "1.0.0",
+  "description": "tuto-2",
+  "license": "ISC",
+  "author": "anc",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongodb": "^6.15.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
